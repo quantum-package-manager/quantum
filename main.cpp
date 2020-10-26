@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include "build.cpp"
+#include "build.hpp"
 
 int main(int argc, char *argv[]){
 	if ( argc != 1 ){
@@ -10,7 +10,7 @@ int main(int argc, char *argv[]){
             std::string cmd = "curl -LO https://raw.githubusercontent.com/RhinoCodes/repo/main/repo/"+pkg+"/quantum.lua";
             const char *command = cmd.c_str();
             system(command);
-			build();
+	    build();
             cmd = "rm quantum.lua";
             command = cmd.c_str();
             system(command);

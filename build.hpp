@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include "util.h"
 #include <unistd.h>
 
 extern "C"
