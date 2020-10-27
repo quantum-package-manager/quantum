@@ -10,9 +10,7 @@ extern "C"
 }
 
 // add checks later - api call: lua_gettop returns the number of items on the stack
-Package::Package(const lua_State *L) : L(L) {
-    L = L;
-}
+Package::Package(const lua_State *L) : L(L) {}
 
 bool Package::download() {
     chdir("builddir/");
@@ -43,8 +41,8 @@ bool Package::install(lua_State *L){
     }
 }
 
-bool Package::lua_quantum_install(std::string file){
+int Package::lua_quantum_install(lua_State *L){
     std::string cmd = "cp "+file+" ../../bindir/"+name;
-    command = cmd.c_str();
+    const char *command = cmd.c_str();
     system(command);
 }

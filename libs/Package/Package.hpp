@@ -1,3 +1,5 @@
+#include <string>
+
 extern "C"
 {
 #include "../lua535/include/lua.h"
@@ -14,9 +16,9 @@ struct Package {
   std::string repo;
   lua_State *L;
 
-  Package(const lua_State *L);
+  Package(lua_State *L);
   bool download();
   bool build();
   bool install();
-  bool lua_quantum_install(std::string file);
+  int lua_quantum_install(lua_State *L);
 };
