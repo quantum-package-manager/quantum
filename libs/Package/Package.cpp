@@ -1,4 +1,5 @@
 #include "libs/Package/Package.hpp"
+#include "libs/CheckLua.hpp"
 #include <unistd.h>
 #include <iostream>
 
@@ -44,6 +45,7 @@ bool Package::install(){
 }
 
 int Package::lua_quantum_install(){
+    std::string file = lua_tostring(L, 1);
     std::string cmd("cp ");
     cmd.append(file);
     cmd.append(" ../../bindir/");
