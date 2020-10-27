@@ -20,5 +20,5 @@ struct Package {
   bool download();
   bool build();
   bool install();
-  int lua_quantum_install(lua_State *L);
+  int lua_quantum_install();
 };

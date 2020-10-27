@@ -10,16 +10,16 @@ extern "C"
 }
 
 // add checks later - api call: lua_gettop returns the number of items on the stack
-Package::Package(const lua_State *L) : L(L) {}
+Package::Package(lua_State *L) : L(L) {}
 
 bool Package::download() {
     chdir("builddir/");
-    std::string cmd = "git clone "+source;
-    command = cmd.c_str();
-    system(command);
+    std::string cmd("git clone ");
+    cmd.append(source);
+    return !!system(cmd.c_str());
 }
 
-bool Package::build(lua_State *L){
+bool Package::build(){
     lua_getglobal(L, "build");
     if (lua_isfunction(L, -1)){
       lua_pushstring(L, name.c_str());
@@ -28,9 +28,10 @@ bool Package::build(lua_State *L){
         std::cout << std::endl;
       }
     }
+    return true;
 }
 
-bool Package::install(lua_State *L){
+bool Package::install(){
     lua_getglobal(L, "install");
     if (lua_isfunction(L, -1)){
       lua_pushstring(L, name.c_str());
@@ -39,10 +40,13 @@ bool Package::install(lua_State *L){
         std::cout << std::endl;
       }
     }
+    return true;
 }
 
-int Package::lua_quantum_install(lua_State *L){
-    std::string cmd = "cp "+file+" ../../bindir/"+name;
-    const char *command = cmd.c_str();
-    system(command);
+int Package::lua_quantum_install(){
+    std::string cmd("cp ");
+    cmd.append(file);
+    cmd.append(" ../../bindir/");
+    cmd.append(name);
+    return !!system(cmd.c_str());
 }
