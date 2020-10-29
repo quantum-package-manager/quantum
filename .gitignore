@@ -1,6 +1,7 @@
 bin
 bindir
 builddir
+quantum.lua
 obj
 Makefile
 quantum.make

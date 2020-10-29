@@ -53,7 +53,7 @@ int build(std::string pkg){
 
     std::fstream repo;
     std::string repox;
-    repo.open("repo",std::ios::in);
+    repo.open("repo",std::1ios::in);
     if(repo.is_open()){
         std::string line;
         while(getline(repo, line)){
@@ -99,6 +99,9 @@ int build(std::string pkg){
             
             cmd = "rm -rf builddir/";
             cmd.append(package.name);
+            system(cmd.c_str());
+
+            cmd = "rm quantum.lua";
             system(cmd.c_str());
         }
     }   
