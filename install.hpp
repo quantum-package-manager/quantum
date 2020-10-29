@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <unistd.h>
 #include <string>
 #include "libs/CheckLua.hpp"
@@ -50,7 +51,18 @@ int build(std::string pkg){
 
     lua_register(L, "quantum_install", lua_quantum_install);
 
-    std::string cmd = "curl -LO https://raw.githubusercontent.com/RhinoCodes/repo/main/repo/";
+    std::fstream repo;
+    std::string repox;
+    repo.open("repo",std::ios::in);
+    if(repo.is_open()){
+        std::string line;
+        while(getline(repo, line)){
+            repox=line;
+        }
+    }
+
+    std::string cmd = "curl -LO ";
+    cmd.append(repox);
     cmd.append(pkg);
     cmd.append("/quantum.lua");
 
