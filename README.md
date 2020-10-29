@@ -3,7 +3,11 @@
 
 Quantum is primarily a non-root pkg manager that installs things to a users home directory.<br>This feature was originally created so that computers running SEMCOS wouldn't have death by package manager, but then we split off into a seperate project.
 
-Build Dependencies are `lua5.3` available on Void Linux, Arch Linux, & Gentoo LInux (there's probably more)
+Build Dependencies are `lua5.3` available on Void Linux, Arch Linux, & Gentoo Linux (there's probably more)<br>
+Arch Linux: `lua53`<br>
+Void Linux: `lua53`<br>
+Gentoo Linux: `dev-lang/lua-5.3[.5]`
+
 
 To install clone and run
 `./setup_env && g++ cli.cpp -o quantum -llua5.3` and add `export PATH=~/quantum-lua/bin/:$PATH` to your `.bashrc` or `.zshrc`<br>
