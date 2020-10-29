@@ -1,4 +1,6 @@
 bin
+bindir
+builddir
 obj
 Makefile
 quantum.make
