@@ -59,7 +59,7 @@ int build(std::string pkg){
     cmd.append(pkg);
     cmd.append("/quantum.lua");
 
-    // system(cmd.c_str());
+    system(cmd.c_str());
 
     int r = luaL_dofile(L, "quantum.lua");
     lua_register(L, "quantum_install", lua_quantum_install);
