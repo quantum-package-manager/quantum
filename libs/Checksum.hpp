@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 
-std::string checksum(std::string file) {
+std::string checksumFile(std::string file) {
     std::string cmd="sha512sum ";
     cmd.append(file);
 

@@ -4,7 +4,6 @@
 #include <string>
 #include "libs/CheckLua.hpp"
 #include "libs/Package/Package.cpp"
-#include "libs/Checksum.hpp"
 
 extern "C"
 {
@@ -22,26 +21,20 @@ int lua_quantum_install(lua_State *L){
     system(cmd.c_str());
 
     std::string file = lua_tostring(L, 1);
-    std::string checksuma = lua_tostring(L, 2);
 
-    if(checksuma == checksum(file)){
-        cmd = "cp ";
-        cmd.append(file);
-        cmd.append(" ../../bindir/");
-        cmd.append(package.name);
-        system(cmd.c_str());
+    cmd = "cp ";
+    cmd.append(file);
+    cmd.append(" ../../bindir/");
+    cmd.append(package.name);
+    system(cmd.c_str());
 
-        chdir("../../bin");
-        cmd = "ln -s ../bindir/";
-        cmd.append(package.name);
-        cmd.append("/");
-        cmd.append(file);
+    chdir("../../bin");
+    cmd = "ln -s ../bindir/";
+    cmd.append(package.name);
+    cmd.append("/");
+    cmd.append(file);
 
-        system(cmd.c_str());
-    } else{
-        std::cout << std::endl << "CHECKSUM FAILURE, EXITING" << std::endl;
-        std::_Exit;
-    }
+    system(cmd.c_str());
 
     return 1;
 }
@@ -53,7 +46,7 @@ int build(std::string pkg){
 
     std::fstream repo;
     std::string repox;
-    repo.open("repo",std::1ios::in);
+    repo.open("repo",std::ios::in);
     if(repo.is_open()){
         std::string line;
         while(getline(repo, line)){
@@ -66,7 +59,7 @@ int build(std::string pkg){
     cmd.append(pkg);
     cmd.append("/quantum.lua");
 
-    system(cmd.c_str());
+    // system(cmd.c_str());
 
     int r = luaL_dofile(L, "quantum.lua");
     lua_register(L, "quantum_install", lua_quantum_install);
@@ -88,6 +81,19 @@ int build(std::string pkg){
             package.source  = lua_tostring(L, -1);
             lua_pop(L, 1);
 
+            lua_pushstring(L, "git");
+            lua_gettable(L, -2);
+            package.git  = lua_toboolean(L, -1);
+            lua_pop(L, 1);
+
+            lua_pushstring(L, "checksum");
+            lua_gettable(L, -2);
+            if(!lua_isnil(L, -1)){
+                package.checksum = lua_tostring(L, -1);
+            } else{
+                package.checksum = "none";
+            }
+            lua_pop(L, 1);
                     
             package.download();
             chdir("builddir/");

@@ -16,6 +16,8 @@ struct Package{
     std::string summary;
     std::string description;
     std::string source;
+    std::string checksum;
+    bool git;
     lua_State *L;
 
     bool download();

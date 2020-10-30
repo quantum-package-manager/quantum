@@ -5,3 +5,6 @@ quantum.lua
 obj
 Makefile
 quantum.make
+cli
+main
+quantum
