@@ -85,7 +85,7 @@ int build(std::string pkg){
             lua_gettable(L, -2);
             package.git  = lua_toboolean(L, -1);
             lua_pop(L, 1);
-
+            
             lua_pushstring(L, "checksum");
             lua_gettable(L, -2);
             if(!lua_isnil(L, -1)){
