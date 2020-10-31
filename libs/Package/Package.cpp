@@ -33,8 +33,9 @@ bool Package::build(){
 bool Package::download(){
     chdir("builddir/");
     std::string cmd;
-    if (git==true){                   
-      std::string cmd("git clone ");
+    
+    if (git==true){            
+      cmd = "git clone ";
       cmd.append(source); 
     } else{
       std::string s = source;
@@ -84,7 +85,6 @@ bool Package::download(){
         cmd.append(dir_suffix);
         cmd.append(" ");
         cmd.append(name);
-        system(cmd.c_str());
       } else{
         std::cout << std::endl << "CHECKSUM ERROR, EXITING" << std::endl;
         std::_Exit(1);

@@ -34,11 +34,17 @@ int lua_quantum_install(lua_State *L){
     return 1;
 }
 
+int lua_make(lua_State *L){
+    std::string cmd("make");
+
+    return !!system(cmd.c_str());
+}
+
 int build(std::string pkg){
     luaL_openlibs(L);
 
     lua_register(L, "quantum_install", lua_quantum_install);
-
+    lua_register(L, "make", lua_make);
     std::fstream repo;
     std::string repox;
     repo.open("repo",std::ios::in);
@@ -91,16 +97,18 @@ int build(std::string pkg){
             lua_pop(L, 1);
                     
             package.download();
-            chdir("builddir/");
-            package.build();
             chdir(package.name.c_str());
+            
+            package.build();
+            cmd = "echo $(pwd)";
+            system(cmd.c_str());
             package.install();
-
-            chdir("..");
             
             cmd = "rm -rf builddir/";
             cmd.append(package.name);
             system(cmd.c_str());
+
+            chdir("..");
 
             cmd = "rm quantum.lua";
             system(cmd.c_str());
