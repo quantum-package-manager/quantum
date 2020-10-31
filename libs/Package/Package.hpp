@@ -1,3 +1,6 @@
+#ifndef QUAMTUM_libs_Package_Package_HPP_
+#define QUAMTUM_libs_Package_Package_HPP_
+
 #include <iostream>
 #include <string>
 
@@ -24,3 +27,5 @@ struct Package{
     bool build();
     bool install();
 };
+
+#endif // QUAMTUM_libs_Package_Package_HPP_

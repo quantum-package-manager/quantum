@@ -1,3 +1,6 @@
+#ifndef QUAMTUM_libs_CheckLua_HPP_
+#define QUAMTUM_libs_CheckLua_HPP_
+
 #include <iostream>
 
 extern "C"
@@ -7,7 +10,7 @@ extern "C"
 #include "lua535/include/lualib.h"
 }
 
-bool CheckLua(lua_State *L, int r){
+static inline bool CheckLua(lua_State *L, int r){
   if (r == LUA_OK){
       return true;
   } else {
@@ -16,3 +19,5 @@ bool CheckLua(lua_State *L, int r){
     return false;
   }
 }
+
+#endif // QUAMTUM_libs_CheckLua_HPP_

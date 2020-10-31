@@ -1,7 +1,10 @@
+#ifndef QUAMTUM_libs_Checksum_HPP_
+#define QUAMTUM_libs_Checksum_HPP_
+
 #include <iostream>
 #include <string>
 
-std::string checksumFile(std::string file) {
+static inline std::string checksumFile(std::string file) {
     std::string cmd="sha512sum ";
     cmd.append(file);
 
@@ -26,3 +29,5 @@ std::string checksumFile(std::string file) {
 
     return data;
 }
+
+#endif // QUAMTUM_libs_Checksum_HPP_

@@ -1,5 +1,6 @@
 #include "Package.hpp"
-#include "../Checksum.hpp"
+#include "libs/CheckLua.hpp"
+#include "libs/Checksum.hpp"
 #include <iostream>
 #include <unistd.h>
 #include <vector>
