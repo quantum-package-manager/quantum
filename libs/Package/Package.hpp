@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 
 extern "C"
 {
@@ -10,6 +11,10 @@ extern "C"
 #include "../lua535/include/lauxlib.h"
 #include "../lua535/include/lualib.h"
 }
+
+
+void tokenize(std::string const &str, const char delim,
+			std::vector<std::string> &out);
 
 struct Package{
     Package(lua_State *L) : L(L) {};

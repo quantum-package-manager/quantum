@@ -5,8 +5,6 @@
 #include "libs/CheckLua.hpp"
 #include "libs/Package/Package.hpp"
 
-
-
 lua_State *L = luaL_newstate();
 Package package{L};
 
@@ -16,7 +14,12 @@ int lua_quantum_install(lua_State *L){
     system(cmd.c_str());
 
     std::string file = lua_tostring(L, 1);
+    const char delim = '/';
 
+	std::vector<std::string> out;
+	tokenize(file, delim, out);
+
+	std::string name = out[out.size() - 1];
     cmd = "cp ";
     cmd.append(file);
     cmd.append(" ../../bindir/");
@@ -27,7 +30,7 @@ int lua_quantum_install(lua_State *L){
     cmd = "ln -s ../bindir/";
     cmd.append(package.name);
     cmd.append("/");
-    cmd.append(file);
+    cmd.append(name);
 
     system(cmd.c_str());
 

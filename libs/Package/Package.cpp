@@ -3,7 +3,6 @@
 #include "libs/Checksum.hpp"
 #include <iostream>
 #include <unistd.h>
-#include <vector>
 
 void tokenize(std::string const &str, const char delim,
 			std::vector<std::string> &out)
