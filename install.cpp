@@ -9,8 +9,10 @@ lua_State *L = luaL_newstate();
 Package package{L};
 
 int lua_quantum_install(lua_State *L){
-    std::string cmd("mkdir ../../bindir/");
+    std::string cmd("mkdir -p ../../bindir/");
     cmd.append(package.name);
+    cmd.append("/");
+    cmd.append(package.version);
     system(cmd.c_str());
 
     std::string file = lua_tostring(L, 1);
@@ -24,11 +26,15 @@ int lua_quantum_install(lua_State *L){
     cmd.append(file);
     cmd.append(" ../../bindir/");
     cmd.append(package.name);
+    cmd.append("/");
+    cmd.append(package.version);
     system(cmd.c_str());
 
     chdir("../../bin");
     cmd = "ln -s ../bindir/";
     cmd.append(package.name);
+    cmd.append("/");
+    cmd.append(package.version);
     cmd.append("/");
     cmd.append(name);
 
@@ -103,15 +109,13 @@ int build(std::string pkg){
             chdir(package.name.c_str());
             
             package.build();
-            cmd = "echo $(pwd)";
-            system(cmd.c_str());
             package.install();
-            
-            cmd = "rm -rf builddir/";
-            cmd.append(package.name);
-            system(cmd.c_str());
 
             chdir("..");
+
+            cmd = "rm -rf builddir/*";
+            system(cmd.c_str());
+
 
             cmd = "rm quantum.lua";
             system(cmd.c_str());

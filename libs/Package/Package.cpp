@@ -45,7 +45,6 @@ bool Package::download(){
 
 	    std::string download = out[out.size() - 1];
 
-      std::cout << download;
       std::string cmd = "curl -LO ";
       cmd.append(source); 
       system(cmd.c_str());
@@ -60,12 +59,14 @@ bool Package::download(){
           dir_suffix.pop_back();
         }
 
+        
         cmd = "mv ";
         cmd.append(name); 
         cmd.append("-");
         cmd.append(dir_suffix);
         cmd.append(" ");
         cmd.append(name);
+
         system(cmd.c_str());
       } else if(checksum == "none"){
         cmd = "tar xvf ";
@@ -84,6 +85,8 @@ bool Package::download(){
         cmd.append(dir_suffix);
         cmd.append(" ");
         cmd.append(name);
+
+        system(cmd.c_str());
       } else{
         std::cout << std::endl << "CHECKSUM ERROR, EXITING" << std::endl;
         std::_Exit(1);
