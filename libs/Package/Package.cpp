@@ -18,6 +18,9 @@ void tokenize(std::string const &str, const char delim,
 }
 
 bool Package::build(){
+    std::string cmd;
+    cmd = "echo $(pwd) > ~/log";
+    system(cmd.c_str());
     lua_getglobal(L, "build");
     if (lua_isfunction(L, -1)){
       lua_pushstring(L, name.c_str());
@@ -61,9 +64,12 @@ bool Package::download(){
 
         
         cmd = "mv ";
-        cmd.append(name); 
-        cmd.append("-");
-        cmd.append(dir_suffix);
+        if(dir_suffix.rfind(name, 0) != 0){
+          cmd.append(name); 
+          cmd.append("-");
+        } else {
+          cmd.append(dir_suffix);
+        }
         cmd.append(" ");
         cmd.append(name);
 
@@ -80,12 +86,15 @@ bool Package::download(){
         }
 
         cmd = "mv ";
-        cmd.append(name); 
-        cmd.append("-");
+        if(dir_suffix.rfind(name, 0) != 0){
+          cmd.append(name); 
+          cmd.append("-");
+        }
+
         cmd.append(dir_suffix);
         cmd.append(" ");
         cmd.append(name);
-
+        std::cout << cmd;
         system(cmd.c_str());
       } else{
         std::cout << std::endl << "CHECKSUM ERROR, EXITING" << std::endl;
