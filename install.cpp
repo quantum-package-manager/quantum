@@ -48,13 +48,25 @@ int lua_make(lua_State *L){
 }
 
 int build(std::string pkg){
+    auto me = getuid();
+    auto myprivs = geteuid();
+    std::string install_dir;
+    if (myprivs == 0){
+        install_dir = "/usr/share/quantum/";
+    } else {
+        install_dir = std::getenv("HOME");
+        install_dir.append("/quantum-lua");
+    }
+
     luaL_openlibs(L);
 
     lua_register(L, "quantum_install", lua_quantum_install);
     lua_register(L, "make", lua_make);
     std::fstream repo;
     std::string repox;
-    repo.open("repo",std::ios::in);
+    std::string filePath=install_dir;
+    filePath.append("/repo");
+    repo.open(filePath,std::ios::in);
     if(repo.is_open()){
         std::string line;
         while(getline(repo, line)){
@@ -62,6 +74,7 @@ int build(std::string pkg){
         }
     }
 
+    chdir(install_dir.c_str());
     std::string cmd = "curl -LO ";
     cmd.append(repox);
     cmd.append(pkg);
@@ -70,6 +83,8 @@ int build(std::string pkg){
     system(cmd.c_str());
 
     int r = luaL_dofile(L, "quantum.lua");
+    lua_pushstring(L, install_dir.c_str());
+    lua_setglobal(L, "install_dir");
     lua_register(L, "quantum_install", lua_quantum_install);
     if (CheckLua(L, r)){
         lua_getglobal(L, "package");
