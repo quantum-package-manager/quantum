@@ -1,7 +1,8 @@
 # Quantum
 ## A Package Manager that doesn't screw with your system
 
-Quantum is primarily a non-root pkg manager that installs things to a users home directory.<br>This feature was originally created so that computers running SEMCOS wouldn't have death by package manager, but then we split off into a seperate project.
+Quantum is primarily a non-root package Manager, that aims to be able to install a wide variety of software without messing with `/`
+We also aim to be fast and user friendly, both to use and to write build files for. This was originally so [SEMC OS](https://github.com/semissioncontrol/semcOS) wouldnt have death by it's own package manager.<br>
 
 Build Dependencies are `lua5.3` & `premake5` available on Void Linux, Arch Linux, & Gentoo Linux (there's probably more)<br>
 Arch Linux: `lua53`<br>
