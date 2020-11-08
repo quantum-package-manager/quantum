@@ -11,13 +11,17 @@ Gentoo Linux: `dev-lang/lua-5.3[.5]`
 <br>Will add premake pkg names later
 
 To install, install dependencies, clone and run
-`./setup_env && premake5 gmake2 && make` and add `export PATH=~/quantum-lua/bin/:$PATH` to your `.bashrc` or `.zshrc`<br>
-Then you can run `./build/release/quantum`, to, well run quantum (you can move the file to the local quantum directory)<br>
-To Run:
-Be in the directory and run:<br>
-  `./quantum install <pkg>`<br>
-  `./quantum remove <pkg>`<br>
+`./setup_env && premake5 gmake2 && make` and add `export PATH=~/quantum-lua/bin/:/usr/share/quantum/bin:$PATH` to your `.bashrc`, `.zshrc` or `.fishrc`<br>
+Then you can move `build/release/quantum` to `/bin`
+
+Syntax:
+```bash
+quantum install [pkg]
+```
+Package Uninstall's are currently removed. Will be re-added soon<br>
 
 TODO:
+
+Done:
 * Make it so that you can run `quantum` from anywhere
 * Add a (secondary) option for install pkgs systemwide
