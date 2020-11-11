@@ -10,5 +10,6 @@ extern Package package;
 
 int lua_quantum_install(lua_State *L);
 int build(std::string pkg);
+int install_pkg(std::string pkg);
 
 #endif // QUAMTUM_install_HPP_

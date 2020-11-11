@@ -31,6 +31,7 @@ struct Package{
     bool download();
     bool build();
     bool install();
+    void clear();
 };
 
 #endif // QUAMTUM_libs_Package_Package_HPP_

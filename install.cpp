@@ -4,12 +4,12 @@
 #include <unistd.h>
 #include "libs/CheckLua.hpp"
 #include "libs/Package/Package.hpp"
+#include "libs/installed.hpp"
 
 lua_State *L = luaL_newstate();
 Package package{L};
 
 int lua_quantum_install(lua_State *L){
-
     std::string file = lua_tostring(L, 1);
     bool is_already_in_bindir = lua_toboolean(L, 2);
 
@@ -47,10 +47,21 @@ int lua_make(lua_State *L){
     return !!system(cmd.c_str());
 }
 
+int install_pkg(std::string pkg){
+    /* build("pfetch");
+    package.clear();
+    L = luaL_newstate();
+    package = Package{L}; */ // This is dependency testing stuff
+    build(pkg);
+
+    return 0;
+}
+
 int build(std::string pkg){
     auto me = getuid();
     auto myprivs = geteuid();
     std::string install_dir;
+
     if (myprivs == 0){
         install_dir = "/usr/share/quantum/";
     } else {
@@ -114,7 +125,7 @@ int build(std::string pkg){
             lua_gettable(L, -2);
             package.git  = lua_toboolean(L, -1);
             lua_pop(L, 1);
-            
+
             lua_pushstring(L, "checksum");
             lua_gettable(L, -2);
             if(!lua_isnil(L, -1)){
@@ -130,6 +141,8 @@ int build(std::string pkg){
             package.build();
             package.install();
 
+            
+
             chdir("..");
 
             cmd = "rm -rf builddir/*";
@@ -139,8 +152,10 @@ int build(std::string pkg){
             cmd = "rm quantum.lua";
             system(cmd.c_str());
         }
-    }   
+
+    
     lua_close(L);
 
     return 0;
+}
 }

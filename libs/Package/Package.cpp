@@ -36,7 +36,7 @@ bool Package::download(){
     chdir("builddir/");
     std::string cmd;
     
-    if (git==true){            
+    if (git==true){          
       cmd = "git clone ";
       cmd.append(source); 
     } else{
@@ -117,4 +117,14 @@ bool Package::install(){
     }
 
     return true;
+}
+
+void Package::clear(){
+    name = "";
+    version = "";
+    summary = "";
+    description = "";
+    source = "";
+    checksum = "";
+    git = false;
 }
