@@ -2,12 +2,31 @@
 #include <iostream>
 #include <fstream>
 #include <unistd.h>
+#include <vector>
 #include "libs/CheckLua.hpp"
 #include "libs/Package/Package.hpp"
 #include "libs/installed.hpp"
 
 lua_State *L = luaL_newstate();
 Package package{L};
+
+std::vector<std::string> dependencies;
+
+static int set_dependencies(lua_State *L) {
+    dependencies.clear();
+    lua_settop(L, 0);
+    lua_getglobal(L, "dependencies");
+    for(lua_Integer i = 1; lua_geti(L, 1, i) != LUA_TNIL; ++i) {
+        size_t len;
+        const char *str = lua_tolstring(L, 2, &len);
+        if(str) {
+            dependencies.push_back(std::string{str, len});
+        }
+        lua_settop(L, 0);
+        lua_getglobal(L, "dependencies");
+    }
+    return 0;
+}
 
 int lua_quantum_install(lua_State *L){
     std::string file = lua_tostring(L, 1);
@@ -48,10 +67,49 @@ int lua_make(lua_State *L){
 }
 
 int install_pkg(std::string pkg){
-    /* build("pfetch");
-    package.clear();
+    auto me = getuid();
+    auto myprivs = geteuid();
+    std::string install_dir;
+
+    if (myprivs == 0){
+        install_dir = "/usr/share/quantum/";
+    } else {
+        install_dir = std::getenv("HOME");
+        install_dir.append("/quantum-lua");
+    }
+
+    luaL_openlibs(L);
+
+    lua_register(L, "quantum_install", lua_quantum_install);
+    lua_register(L, "make", lua_make);
+    std::fstream repo;
+    std::string repox;
+    std::string filePath=install_dir;
+    filePath.append("/repo");
+    repo.open(filePath,std::ios::in);
+    if(repo.is_open()){
+        std::string line;
+        while(getline(repo, line)){
+            repox=line;
+        }
+    }
+
+    std::string cmd = "curl -LO ";
+    cmd.append(repox);
+    cmd.append(pkg);
+    cmd.append("/quantum.lua");
+
+    system(cmd.c_str());
+
+    int r = luaL_dofile(L, "quantum.lua");
+
+    set_dependencies(L);
+    for(const auto &dep : dependencies) {
+        build(dep);
+    }
+
     L = luaL_newstate();
-    package = Package{L}; */ // This is dependency testing stuff
+
     build(pkg);
 
     return 0;
@@ -135,6 +193,12 @@ int build(std::string pkg){
             }
             lua_pop(L, 1);
                     
+            lua_getglobal(L, "dependencies");
+            set_dependencies(L);
+            for(const auto &dep : dependencies) {
+                std::cout << dep << std::endl;
+            }
+
             package.download();
             chdir(package.name.c_str());
             
@@ -150,7 +214,7 @@ int build(std::string pkg){
 
 
             cmd = "rm quantum.lua";
-            system(cmd.c_str());
+            // system(cmd.c_str());
         }
 
     
