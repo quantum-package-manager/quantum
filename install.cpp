@@ -12,6 +12,8 @@ Package package{L};
 
 std::vector<std::string> dependencies;
 
+// Big thanks to @Joseph Sible-Reinstate Monica  on StackOverflow for this function.
+// Check him out here: https://stackoverflow.com/users/7509065/joseph-sible-reinstate-monica
 static int set_dependencies(lua_State *L) {
     dependencies.clear();
     lua_settop(L, 0);
@@ -67,7 +69,7 @@ int lua_make(lua_State *L){
 }
 
 int install_pkg(std::string pkg){
-    auto me = getuid();
+        auto me = getuid();
     auto myprivs = geteuid();
     std::string install_dir;
 
@@ -107,8 +109,6 @@ int install_pkg(std::string pkg){
     for(const auto &dep : dependencies) {
         build(dep);
     }
-
-    L = luaL_newstate();
 
     build(pkg);
 
@@ -192,20 +192,12 @@ int build(std::string pkg){
                 package.checksum = "none";
             }
             lua_pop(L, 1);
-                    
-            lua_getglobal(L, "dependencies");
-            set_dependencies(L);
-            for(const auto &dep : dependencies) {
-                std::cout << dep << std::endl;
-            }
 
             package.download();
             chdir(package.name.c_str());
             
             package.build();
             package.install();
-
-            
 
             chdir("..");
 
@@ -214,11 +206,12 @@ int build(std::string pkg){
 
 
             cmd = "rm quantum.lua";
-            // system(cmd.c_str());
+            system(cmd.c_str());
         }
 
     
     lua_close(L);
+    L = luaL_newstate();
 
     return 0;
 }
