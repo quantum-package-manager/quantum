@@ -2,6 +2,7 @@
 #include <string>
 #include "install.hpp"
 #include "libs/installed.hpp"
+#include "libs/getDescription.hpp"
 
 int main(int argc, char *argv[]){
     
@@ -31,6 +32,8 @@ int main(int argc, char *argv[]){
             } else {
                 std::cout << "no" << std::endl;
             }
+        } else if(arg=="description"){
+            desc(pkg);
         }
     } else {
         std::cout << "Quantum Package Manager v2 - 0.0.4a" << std::endl;
