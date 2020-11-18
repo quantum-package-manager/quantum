@@ -105,9 +105,11 @@ int install_pkg(std::string pkg){
 
     int r = luaL_dofile(L, "quantum.lua");
 
-    set_dependencies(L);
-    for(const auto &dep : dependencies) {
-        build(dep);
+    if (lua_istable(L, -1)){
+        set_dependencies(L);
+        for(const auto &dep : dependencies) {
+            build(dep);
+        }
     }
 
     build(pkg);

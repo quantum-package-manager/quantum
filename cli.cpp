@@ -19,12 +19,11 @@ int main(int argc, char *argv[]){
             if(answer == "y"){
                 if(arg == "install"){
                     install_pkg(pkg);
-                } 
-            /* else if (arg == "remove"){
-                std::string cmd="rm -rf bindir/"+pkg+" && find bin/ -xtype l -delete";
-	  		    const char *command = cmd.c_str();
-	  		    system(command);
-            } */ // Remove support for uninstalling for a bit
+                } else if (arg == "remove"){
+                    std::string cmd="rm -rf bindir/"+pkg+" && find bin/ -xtype l -delete";
+	  		        const char *command = cmd.c_str();
+	  		        system(command);
+                }
             }   
         } else if(arg=="installed"){
             if (installed(pkg)) {
