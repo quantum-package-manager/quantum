@@ -119,6 +119,30 @@ bool Package::install(){
     return true;
 }
 
+bool Package::uninstall(){
+    lua_getglobal(L, "uninstall");
+    if (lua_isfunction(L, -1)){
+      lua_pushstring(L, name.c_str());
+
+      if (CheckLua(L, lua_pcall(L, 1, 1, 0))){
+        std::cout << std::endl;
+      }
+    } else {
+      std::string cmd="rm -rf ";
+      cmd.append(installDir);
+      cmd.append("/bindir/");
+      cmd.append(name);
+      cmd.append(" && find ");
+      cmd.append(installDir);
+      cmd.append("/bin/ -xtype l -delete");
+      std::cout << std::endl << cmd << std::endl;
+	  	const char *command = cmd.c_str();
+	  	system(command);
+    }
+
+    return true;
+}
+
 void Package::clear(){
     name = "";
     version = "";

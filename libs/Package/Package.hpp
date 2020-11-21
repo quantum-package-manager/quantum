@@ -25,12 +25,14 @@ struct Package{
     std::string description;
     std::string source;
     std::string checksum;
+    std::string installDir;
     bool git;
     lua_State *L;
 
     bool download();
     bool build();
     bool install();
+    bool uninstall();
     void clear();
 };
 

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include "install.hpp"
+#include "remove.hpp"
 #include "libs/installed.hpp"
 #include "libs/getDescription.hpp"
 
@@ -20,9 +21,7 @@ int main(int argc, char *argv[]){
                 if(arg == "install"){
                     install_pkg(pkg);
                 } else if (arg == "remove"){
-                    std::string cmd="rm -rf bindir/"+pkg+" && find bin/ -xtype l -delete";
-	  		        const char *command = cmd.c_str();
-	  		        system(command);
+                    remove(pkg);
                 }
             }   
         } else if(arg=="installed"){

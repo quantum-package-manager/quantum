@@ -1,3 +1,4 @@
 mkdir bindir bin builddir build
 echo Please type in your password so we can create the system-wide quantum directory
 sudo mkdir -p /usr/share/quantum/{bindir,bin,builddir,build}
+sudo cp repo /usr/share/quantum/

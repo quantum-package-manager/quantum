@@ -69,7 +69,7 @@ int lua_make(lua_State *L){
 }
 
 int install_pkg(std::string pkg){
-        auto me = getuid();
+    auto me = getuid();
     auto myprivs = geteuid();
     std::string install_dir;
 
@@ -146,6 +146,7 @@ int build(std::string pkg){
     }
 
     chdir(install_dir.c_str());
+
     std::string cmd = "curl -LO ";
     cmd.append(repox);
     cmd.append(pkg);
@@ -160,6 +161,8 @@ int build(std::string pkg){
     if (CheckLua(L, r)){
         lua_getglobal(L, "package");
         if (lua_istable(L, -1)){
+            package.installDir = install_dir;
+
             lua_pushstring(L, "name");
             lua_gettable(L, -2);
             package.name  = lua_tostring(L, -1);
@@ -201,11 +204,10 @@ int build(std::string pkg){
             package.build();
             package.install();
 
-            chdir("..");
+            chdir(install_dir.c_str());
 
             cmd = "rm -rf builddir/*";
             system(cmd.c_str());
-
 
             cmd = "rm quantum.lua";
             system(cmd.c_str());
