@@ -173,6 +173,18 @@ int build(std::string pkg){
             package.version  = lua_tostring(L, -1);
             lua_pop(L, 1);
 
+            lua_pushstring(L, "root");
+            lua_gettable(L, -2);
+            bool root = lua_toboolean(L, -1);
+            lua_pop(L, 1);
+
+            if(root == true) {
+                if(install_dir != "/usr/share/quantum/"){
+                    std::cout << std::endl << "You must install this package as root." << std::endl;
+                    exit (EXIT_FAILURE);
+                }
+            }
+
             std::string cmd("mkdir -p bindir/");
             cmd.append(package.name);
             cmd.append("/");
