@@ -56,21 +56,14 @@ bool Package::download(){
         cmd.append(download); 
         system(cmd.c_str());
 
-        std::string dir_suffix = download;
+        cmd = "rm ";
+        cmd.append(download);
 
-        for(int i=0; i<7; i++){
-          dir_suffix.pop_back();
-        }
+        system(cmd.c_str());
 
-        
         cmd = "mv ";
-        if(dir_suffix.rfind(name, 0) != 0){
-          cmd.append(name); 
-          cmd.append("-");
-        } else {
-          cmd.append(dir_suffix);
-        }
-        cmd.append(" ");
+        cmd.append(name);
+        cmd.append("* ");
         cmd.append(name);
 
         system(cmd.c_str());
@@ -79,22 +72,16 @@ bool Package::download(){
         cmd.append(download); 
         system(cmd.c_str());
 
-        std::string dir_suffix = download;
+        cmd = "rm ";
+        cmd.append(download);
 
-        for(int i=0; i<7; i++){
-          dir_suffix.pop_back();
-        }
+        system(cmd.c_str());
 
         cmd = "mv ";
-        if(dir_suffix.rfind(name, 0) != 0){
-          cmd.append(name); 
-          cmd.append("-");
-        }
-
-        cmd.append(dir_suffix);
-        cmd.append(" ");
         cmd.append(name);
-        std::cout << cmd;
+        cmd.append("* ");
+        cmd.append(name);       
+
         system(cmd.c_str());
       } else{
         std::cout << std::endl << "CHECKSUM ERROR, EXITING" << std::endl;

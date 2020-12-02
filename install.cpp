@@ -219,7 +219,7 @@ int build(std::string pkg){
             chdir(install_dir.c_str());
 
             cmd = "rm -rf builddir/*";
-            system(cmd.c_str());
+            // system(cmd.c_str());
 
             cmd = "rm quantum.lua";
             system(cmd.c_str());
