@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <unistd.h>
 #include "install.hpp"
 #include "remove.hpp"
 #include "libs/installed.hpp"
@@ -40,8 +41,20 @@ int main(int argc, char *argv[]){
         } else if(arg=="description"){
             desc(pkg);
         } else if(arg=="populate"){
-		std::string cmd="curl -LO https://raw.githubusercontent.com/quantum-package-manager/repo/main/quantum.db";
-		system(cmd.c_str());
+            auto myprivs = geteuid();
+            std::string install_dir;
+
+            if (myprivs == 0){
+                install_dir = "/usr/share/quantum/";
+            } else {
+                install_dir = std::getenv("HOME");
+                install_dir.append("/quantum-lua");
+            }
+
+		    std::string cmd="cd ";
+            cmd.append(install_dir);
+            cmd.append(" && curl -LO https://raw.githubusercontent.com/quantum-package-manager/repo/main/quantum.db");
+		    system(cmd.c_str());
     	}
     } else {
         std::cout << "Quantum Package Manager v2 - 0.1.0a" << std::endl;

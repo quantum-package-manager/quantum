@@ -13,7 +13,6 @@ extern "C"
 int desc(std::string pkg){
     lua_State *L = luaL_newstate();
 
-    auto me = getuid();
     auto myprivs = geteuid();
     std::string install_dir;
 
