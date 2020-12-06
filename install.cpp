@@ -6,6 +6,7 @@
 #include "libs/CheckLua.hpp"
 #include "libs/Package/Package.hpp"
 #include "libs/installed.hpp"
+#include "libs/db/get.hpp"
 
 lua_State *L = luaL_newstate();
 Package package{L};
@@ -68,7 +69,7 @@ int lua_make(lua_State *L){
     return !!system(cmd.c_str());
 }
 
-int install_pkg(std::string pkg){
+int install_pkg(std::string pkg, std::string version){
     auto me = getuid();
     auto myprivs = geteuid();
     std::string install_dir;
@@ -84,7 +85,7 @@ int install_pkg(std::string pkg){
 
     lua_register(L, "quantum_install", lua_quantum_install);
     lua_register(L, "make", lua_make);
-    std::fstream repo;
+    /* std::fstream repo;
     std::string repox;
     std::string filePath=install_dir;
     filePath.append("/repo");
@@ -94,13 +95,11 @@ int install_pkg(std::string pkg){
         while(getline(repo, line)){
             repox=line;
         }
-    }
+    } */
 
     std::string cmd = "curl -LO ";
-    cmd.append(repox);
-    cmd.append(pkg);
-    cmd.append("/quantum.lua");
-
+    cmd.append(get_url(pkg, version));
+    std::cout << std::endl << cmd << std::endl;
     system(cmd.c_str());
 
     int r = luaL_dofile(L, "quantum.lua");
@@ -108,16 +107,16 @@ int install_pkg(std::string pkg){
     if (lua_istable(L, -1)){
         set_dependencies(L);
         for(const auto &dep : dependencies) {
-            build(dep);
+            build(dep, version);
         }
     }
 
-    build(pkg);
+    build(pkg, version);
 
     return 0;
 }
 
-int build(std::string pkg){
+int build(std::string pkg, std::string version){
     auto me = getuid();
     auto myprivs = geteuid();
     std::string install_dir;
@@ -133,7 +132,7 @@ int build(std::string pkg){
 
     lua_register(L, "quantum_install", lua_quantum_install);
     lua_register(L, "make", lua_make);
-    std::fstream repo;
+    /* std::fstream repo;
     std::string repox;
     std::string filePath=install_dir;
     filePath.append("/repo");
@@ -143,15 +142,13 @@ int build(std::string pkg){
         while(getline(repo, line)){
             repox=line;
         }
-    }
+    } */
 
     chdir(install_dir.c_str());
 
     std::string cmd = "curl -LO ";
-    cmd.append(repox);
-    cmd.append(pkg);
-    cmd.append("/quantum.lua");
-
+    cmd.append(get_url(pkg, version));
+    std::cout << std::endl << cmd << std::endl;
     system(cmd.c_str());
 
     int r = luaL_dofile(L, "quantum.lua");
@@ -219,7 +216,7 @@ int build(std::string pkg){
             chdir(install_dir.c_str());
 
             cmd = "rm -rf builddir/*";
-            // system(cmd.c_str());
+            system(cmd.c_str());
 
             cmd = "rm quantum.lua";
             system(cmd.c_str());
