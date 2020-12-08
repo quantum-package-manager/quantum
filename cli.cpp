@@ -22,14 +22,17 @@ int main(int argc, char *argv[]){
 
             if(answer == "y"){
                 if(arg == "install"){
-			std::cout << argc;
-		    if(argc==3){
-                    	install_pkg(pkg);
-		    } else {
-			install_pkg(pkg, argv[3]);
-		    }
+		            if(argc==3){
+                        install_pkg(pkg);
+		            } else {
+			            install_pkg(pkg, argv[3]);
+		            }
                 } else if (arg == "remove"){
-                    remove(pkg);
+                    if(argc==3){
+                        remove(pkg);
+                    } else {
+                        remove(pkg, argv[3]);
+                    }
                 }
             }   
         } else if(arg=="installed"){
@@ -55,7 +58,9 @@ int main(int argc, char *argv[]){
             cmd.append(install_dir);
             cmd.append(" && curl -LO https://raw.githubusercontent.com/quantum-package-manager/repo/main/quantum.db");
 		    system(cmd.c_str());
-    	}
+    	} /* else if(arg=="update"){
+
+        } */
     } else {
         std::cout << "Quantum Package Manager v2 - 0.1.0a" << std::endl;
     }

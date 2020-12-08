@@ -215,6 +215,15 @@ int build(std::string pkg, std::string version){
 
             chdir(install_dir.c_str());
 
+            std::string version_file_path="bindir/";
+            version_file_path.append(package.name);
+            version_file_path.append("/version");
+
+            std::ofstream version_file;
+            version_file.open (version_file_path.c_str());
+            version_file << package.version;
+            version_file.close();
+
             cmd = "rm -rf builddir/*";
             system(cmd.c_str());
 
