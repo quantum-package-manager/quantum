@@ -6,8 +6,9 @@
 #include "libs/CheckLua.hpp"
 #include "libs/Package/Package.hpp"
 #include "libs/installed.hpp"
+#include "libs/db/get.hpp"
 
-int remove(std::string pkg){
+int remove(std::string pkg, std::string version){
     auto me = getuid();
     auto myprivs = geteuid();
     std::string install_dir;
@@ -23,22 +24,10 @@ int remove(std::string pkg){
 
     luaL_openlibs(L);
 
-    std::fstream repo;
-    std::string repox;
-    std::string filePath=install_dir;
-    filePath.append("/repo");
-    repo.open(filePath,std::ios::in);
-    if(repo.is_open()){
-        std::string line;
-        while(getline(repo, line)){
-            repox=line;
-        }
-    }
-
     std::string cmd = "curl -LO ";
-    cmd.append(repox);
-    cmd.append(pkg);
-    cmd.append("/quantum.lua");
+    cmd.append(get_url(pkg, version));
+    std::cout << std::endl << cmd << std::endl;
+    system(cmd.c_str());
 
     system(cmd.c_str());
 

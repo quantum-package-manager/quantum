@@ -9,3 +9,4 @@ quantum.make
 cli
 main
 quantum
+quantum.db

@@ -7,6 +7,6 @@
 extern lua_State *L;
 extern Package package;
 
-int remove(std::string pkg);
+int remove(std::string pkg, std::string version = "default");
 
 #endif // QUAMTUM_install_HPP_
