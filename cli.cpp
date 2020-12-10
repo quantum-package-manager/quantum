@@ -5,6 +5,7 @@
 #include "remove.hpp"
 #include "libs/installed.hpp"
 #include "libs/getDescription.hpp"
+#include "libs/db/get_version.hpp"
 
 int main(int argc, char *argv[]){
     
@@ -58,10 +59,45 @@ int main(int argc, char *argv[]){
             cmd.append(install_dir);
             cmd.append(" && curl -LO https://raw.githubusercontent.com/quantum-package-manager/repo/main/quantum.db");
 		    system(cmd.c_str());
-    	} /* else if(arg=="update"){
+    	} else if(arg=="update"){
+            auto me = getuid();
+            auto myprivs = geteuid();
+            std::string install_dir;
 
-        } */
+            if (myprivs == 0){
+                install_dir = "/usr/share/quantum/";
+            } else {
+                install_dir = std::getenv("HOME");
+                install_dir.append("/quantum-lua");
+            }
+
+            std::fstream version_file;
+            std::string version;
+            std::string filePath=install_dir;
+            filePath.append("/bindir/");
+            filePath.append(pkg);
+            filePath.append("/version");
+            version_file.open(filePath,std::ios::in);
+            if(version_file.is_open()){
+                std::string line;
+                while(getline(version_file, line)){
+                    version=line;
+                }
+            }
+            if(version == get_version(pkg)){
+                std::cout << pkg << " Is Up To Date!" << std::endl;
+            } else{
+                std::string answer;
+
+                std::cout << pkg << " Needs to be updated, proceed? [Y/n] ";
+                std::cin >> answer;
+                if(answer=="y"){
+                    remove(pkg);
+                    install_pkg(pkg);
+                }
+            }
+        }
     } else {
-        std::cout << "Quantum Package Manager v2 - 0.1.0a" << std::endl;
+        std::cout << "Quantum Package Manager v2 - 0.1.5a" << std::endl;
     }
 }

@@ -9,7 +9,6 @@ std::string url;
 
 static int callback(void *data, int argc, char **argv, char **azColName){
    int i;
-   fprintf(stderr, "%s: ", (const char*)data);
    
    for(i = 0; i<argc; i++){
 	   std::string name = azColName[i];
@@ -24,7 +23,7 @@ int run_sql(std::string pkg, std::string version) {
    sqlite3 *db;
    char *zErrMsg = 0;
    int rc;
-   const char* data = "Callback function called";
+   const char* data = "";
 
    /* Open database */
    rc = sqlite3_open("quantum.db", &db);
@@ -32,8 +31,6 @@ int run_sql(std::string pkg, std::string version) {
    if( rc ) {
       fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
       return(0);
-   } else {
-      fprintf(stderr, "Opened database successfully\n");
    }
 
    /* Create SQL statement */
@@ -60,9 +57,8 @@ int run_sql(std::string pkg, std::string version) {
    if( rc != SQLITE_OK ) {
       fprintf(stderr, "SQL error: %s\n", zErrMsg);
       sqlite3_free(zErrMsg);
-   } else {
-      fprintf(stdout, "Operation done successfully\n");
    }
+
    sqlite3_close(db);
    return 0;
 }
