@@ -83,6 +83,7 @@ int remove(std::string pkg, std::string version){
     }
 
     lua_close(L);
-        
+    L = luaL_newstate();
+
     return 0;
 }

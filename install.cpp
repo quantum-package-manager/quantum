@@ -70,7 +70,6 @@ int lua_make(lua_State *L){
 }
 
 int install_pkg(std::string pkg, std::string version){
-    L = luaL_newstate();
     auto me = getuid();
     auto myprivs = geteuid();
     std::string install_dir;

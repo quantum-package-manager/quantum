@@ -93,11 +93,12 @@ int main(int argc, char *argv[]){
                 std::cin >> answer;
                 if(answer=="y"){
                     remove(pkg);
+                    
                     install_pkg(pkg);
                 }
             }
         }
     } else {
-        std::cout << "Quantum Package Manager v2 - 0.1.5a" << std::endl;
+        std::cout << "Quantum Package Manager - 0.1.6a" << std::endl;
     }
 }

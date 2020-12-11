@@ -1,6 +1,7 @@
 mkdir bindir bin builddir build
 echo Please type in your password so we can create the system-wide quantum directory
 sudo mkdir -p /usr/share/quantum/{bindir,bin,builddir,build}
+mkdir -p {bindir,bin,builddir,build}
 premake5 gmake2
 make -j$(nproc)
 build/release/quantum populate
