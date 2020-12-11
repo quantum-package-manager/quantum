@@ -1,5 +1,6 @@
 # Quantum
 ## A Package Manager that doesn't screw with your system
+### Version v0.1.5a
 
 Quantum is primarily a non-root package Manager, that aims to be able to install a wide variety of software without messing with `/`
 We also aim to be fast and user friendly, both to use and to write build files for. This was originally so [SEMC OS](https://github.com/semissioncontrol/semcOS) wouldnt have death by it's own package manager.<br>
@@ -17,8 +18,10 @@ Then you can move `build/release/quantum` to `/bin`
 Syntax:
 ```bash
 quantum install [pkg]
+quantum install [pkg] [version]
+quantum remove [pkg]
+quantum update [pkg]
 ```
-Package Uninstall's are currently removed. Will be re-added soon<br>
 
 TODO:
 
