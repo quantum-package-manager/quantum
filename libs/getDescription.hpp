@@ -20,7 +20,7 @@ int desc(std::string pkg){
         install_dir = "/usr/share/quantum/";
     } else {
         install_dir = std::getenv("HOME");
-        install_dir.append("/quantum-lua");
+        install_dir.append("/quantum");
     }
 
     luaL_openlibs(L);
