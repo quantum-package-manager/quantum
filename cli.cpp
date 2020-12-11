@@ -68,7 +68,7 @@ int main(int argc, char *argv[]){
                 install_dir = "/usr/share/quantum/";
             } else {
                 install_dir = std::getenv("HOME");
-                install_dir.append("/quantum-lua");
+                install_dir.append("/quantum");
             }
 
             std::fstream version_file;
