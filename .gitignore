@@ -10,3 +10,6 @@ cli
 main
 quantum
 quantum.db
+shells
+log
+shell.lua

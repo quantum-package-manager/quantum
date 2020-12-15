@@ -11,7 +11,7 @@ solution "quantum"
         warnings "Extra"
         files {"**.cpp"}
         includedirs {"."}
-        links {"lua", "sqlite3"}
+        links {"lua5.3", "sqlite3"}
 
         filter "release*"
             optimize "On"
