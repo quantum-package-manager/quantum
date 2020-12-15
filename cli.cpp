@@ -6,6 +6,7 @@
 #include "libs/installed.hpp"
 #include "libs/getDescription.hpp"
 #include "libs/db/get_version.hpp"
+#include "shell.hpp"
 
 int main(int argc, char *argv[]){
     
@@ -97,6 +98,14 @@ int main(int argc, char *argv[]){
                     install_pkg(pkg);
                 }
             }
+        } else if(arg=="shell"){
+            std::string argtwo = argv[2];
+            std::string shell_name = argv[3];
+            if(argtwo == "create"){
+                create_shell(shell_name);
+            } else if(argtwo == "run"){
+                run_shell(shell_name);
+            } 
         }
     } else {
         std::cout << "Quantum Package Manager - 0.1.6a" << std::endl;
