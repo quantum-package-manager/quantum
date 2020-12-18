@@ -107,6 +107,12 @@ int build(std::string pkg, std::string version){
         }
     } */
 
+    std::string install_dir_lua = install_dir;
+    install_dir_lua.append("/bindir/");
+    install_dir_lua.append(pkg);
+    install_dir_lua.append("/");
+    install_dir_lua.append(version);
+
     chdir(install_dir.c_str());
 
     std::string cmd = "curl -LO ";
@@ -115,7 +121,7 @@ int build(std::string pkg, std::string version){
     system(cmd.c_str());
 
     int r = luaL_dofile(L, "quantum.lua");
-    lua_pushstring(L, install_dir.c_str());
+    lua_pushstring(L, install_dir_lua.c_str());
     lua_setglobal(L, "install_dir");
     lua_register(L, "quantum_install", lua_quantum_install);
     if (CheckLua(L, r)){
