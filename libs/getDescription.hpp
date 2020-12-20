@@ -47,8 +47,15 @@ int desc(std::string pkg){
     system(cmd.c_str());
 
     int r = luaL_dofile(L, "quantum.lua");
-    lua_pushstring(L, install_dir.c_str());
+    
+    std::string install_dir_lua = install_dir;
+    install_dir_lua.append("/bindir/");
+    install_dir_lua.append(pkg);
+    install_dir_lua.append("/");
+    install_dir_lua.append(package.version);
+    lua_pushstring(L, install_dir_lua.c_str());
     lua_setglobal(L, "install_dir");
+
     lua_register(L, "quantum_install", lua_quantum_install);
     if (CheckLua(L, r)){
         lua_pushstring(L, "description");

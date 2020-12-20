@@ -48,7 +48,15 @@ int remove(std::string pkg, std::string version){
             package.version  = lua_tostring(L, -1);
             lua_pop(L, 1);
 
-            std::string cmd("mkdir -p bindir/");
+            std::string install_dir_lua = install_dir;
+            install_dir_lua.append("/bindir/");
+            install_dir_lua.append(pkg);
+            install_dir_lua.append("/");
+            install_dir_lua.append(package.version);
+            lua_pushstring(L, install_dir_lua.c_str());
+            lua_setglobal(L, "install_dir");
+
+	    std::string cmd("mkdir -p bindir/");
             cmd.append(package.name);
             cmd.append("/");
             cmd.append(package.version);
