@@ -14,7 +14,7 @@ int main(int argc, char *argv[]){
     if ( argc != 1 ){
 	std::string arg=argv[1];
 	std::string pkg="";
-	if(argc == 3){
+	if(argc >= 3){
 		pkg=argv[2];
 	}
         if(arg=="install" || arg=="remove"){
@@ -27,7 +27,13 @@ int main(int argc, char *argv[]){
 		            if(argc==3){
                         install_pkg(pkg);
 		            } else {
-			            install_pkg(pkg, argv[3]);
+                        std::string argtwo = argv[3];
+                        if(argtwo == "bootstrap"){
+                            std::cout << std::endl << argtwo << std::endl;
+                            install_pkg(pkg, "default", argv[4]);
+                        } else {
+			                install_pkg(pkg, argv[3]);
+                        }
 		            }
                 } else if (arg == "remove"){
                     if(argc==3){
