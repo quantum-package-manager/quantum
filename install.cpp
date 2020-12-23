@@ -8,11 +8,34 @@
 #include "libs/installed.hpp"
 #include "libs/db/get.hpp"
 #include "util.hpp"
+#include <stdexcept>
 
 lua_State *L = luaL_newstate();
 Package package{L};
 
 std::vector<std::string> dependencies;
+
+std::string exec(std::string command) {
+   char buffer[128];
+   std::string result = "";
+
+   // Open pipe to file
+   FILE* pipe = popen(command.c_str(), "r");
+   if (!pipe) {
+      return "popen failed!";
+   }
+
+   // read till end of process:
+   while (!feof(pipe)) {
+
+      // use buffer to read and add to result
+      if (fgets(buffer, 128, pipe) != NULL)
+         result += buffer;
+   }
+
+   pclose(pipe);
+   return result;
+}
 
 // Big thanks to @Joseph Sible-Reinstate Monica  on StackOverflow for this function.
 // Check him out here: https://stackoverflow.com/users/7509065/joseph-sible-reinstate-monica
@@ -41,6 +64,11 @@ int install_pkg(std::string pkg, std::string version, std::string root){
         install_dir = root;
         install_dir.append("/usr/share/quantum/");
         if(root != "/"){
+            std::string path = get_current_dir_name();
+            path.append("/");
+            path.append(install_dir);
+            install_dir = path;
+
             std::string cmd = "mkdir -p ";
             cmd.append(root);
             cmd.append("/{/bin/,/usr/share/quantum/bindir,/usr/share/quantum/bin,/usr/share/quantum/builddir} && cp /usr/share/quantum/quantum.db ");
@@ -94,15 +122,8 @@ int install_pkg(std::string pkg, std::string version, std::string root){
 int build(std::string pkg, std::string version, std::string root){
     auto me = getuid();
     auto myprivs = geteuid();
-    std::string install_dir;
 
-    if (myprivs == 0){
-        install_dir = root;
-        install_dir.append("/usr/share/quantum/");
-    } else {
-        install_dir = std::getenv("HOME");
-        install_dir.append("/quantum");
-    }
+    std::string install_dir = get_current_dir_name();
 
     luaL_openlibs(L);
 
@@ -120,8 +141,6 @@ int build(std::string pkg, std::string version, std::string root){
         }
     } */
 
-    
-
     chdir(install_dir.c_str());
 
     std::string cmd = "curl -LO ";
@@ -130,8 +149,11 @@ int build(std::string pkg, std::string version, std::string root){
 
     int r = luaL_dofile(L, "quantum.lua");
     lua_register(L, "quantum_install", lua_quantum_install);
-    lua_pushstring(L, root.c_str());
-    lua_setglobal(L, "root")
+    std::string rootx = install_dir;
+    rootx.append("/../../../");
+    lua_pushstring(L, rootx.c_str());
+    lua_setglobal(L, "root");
+    std::cout << root;
     if (CheckLua(L, r)){
         lua_getglobal(L, "package");
         if (lua_istable(L, -1)){
@@ -161,7 +183,7 @@ int build(std::string pkg, std::string version, std::string root){
             lua_pop(L, 1);
 
             if(root == true) {
-                if(install_dir != "/usr/share/quantum/"){
+                 if (myprivs != 0){
                     std::cout << std::endl << "You must install this package as root." << std::endl;
                     exit (EXIT_FAILURE);
                 }

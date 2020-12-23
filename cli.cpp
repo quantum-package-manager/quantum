@@ -29,7 +29,6 @@ int main(int argc, char *argv[]){
 		            } else {
                         std::string argtwo = argv[3];
                         if(argtwo == "bootstrap"){
-                            std::cout << std::endl << argtwo << std::endl;
                             install_pkg(pkg, "default", argv[4]);
                         } else {
 			                install_pkg(pkg, argv[3]);

@@ -3,6 +3,7 @@
 
 #include <string>
 #include "libs/Package/Package.hpp"
+#include <filesystem>
 
 extern lua_State *L;
 extern Package package;
