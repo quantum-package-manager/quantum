@@ -68,8 +68,9 @@ bool Package::download(){
 
         system(cmd.c_str());
       } else if(checksum == "none"){
-        cmd = "tar xvf ";
+        cmd = "mkdir temp && tar xvf ";
         cmd.append(download); 
+        cmd.append(" --directory=temp/");
         system(cmd.c_str());
 
         cmd = "rm ";
@@ -77,11 +78,9 @@ bool Package::download(){
 
         system(cmd.c_str());
 
-        cmd = "mv ";
-        cmd.append(name);
-        cmd.append("* ");
+        cmd = "mv temp/* ";
         cmd.append(name);       
-
+        cmd.append(" && rm -rf temp");
         system(cmd.c_str());
       } else{
         std::cout << std::endl << "CHECKSUM ERROR, EXITING" << std::endl;
